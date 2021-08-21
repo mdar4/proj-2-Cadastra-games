@@ -47,6 +47,7 @@ const games = [
   },
 ];
 
+// Functions
 const getGameValidate = () => games.filter(Boolean);
 
 const getGamesById = (id) => {
@@ -58,6 +59,8 @@ const getGamesById = (id) => {
 const getIndexByGame = (id) => {
     getGameValidate().find((game) => game.id == id);
 }
+// -----------------------------------------------------------------------
+
 
 // GET - Rota principal
 app.get("/", (req, res) => {
@@ -66,13 +69,13 @@ app.get("/", (req, res) => {
 
 // GET - Rota com a lista de jogos
 app.get("/games", (req, res) => {
-  res.send(games);
+  res.send(getGameValidate());
 });
 
 // GET - Rota que busca pelo id
 app.get("/games/:id", (req, res) => {
-  const id = req.params.id - 1;
-  const game = games[id];
+  const id = parseInt(req.params.id);
+  const game = getGamesById(id);
 
   if (!game) {
     res.send("Este jogo não está cadastrado.");
