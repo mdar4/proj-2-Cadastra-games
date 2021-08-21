@@ -86,10 +86,28 @@ app.get("/games/:id", (req, res) => {
 
 // POST - Método para cadastrar um novo jogo com
 app.post("/games", (req, res) => {
-  const game = req.body.game;
-  const id = games.length;
-  games.push(game);
+  const game = req.body;
 
+  if(!game || !game.nome || !game.ano) {
+      res.status(400).send({
+          message: "Jogo inválido, tente novamente !"
+      });
+      return;
+  }
+
+  const lastGame = games[games.length - 1];
+
+  if(games.length) {
+      game.id = lastGame.id + 1;
+      games.push(game);
+  
+  } else {
+      game.id = 1;
+      games.push(game);
+  }
+
+//   const id = games.length;
+  
   res.send(`Novo jogo adicionado com sucesso: ${game}.
     ID do jogo: ${id}`);
 });
