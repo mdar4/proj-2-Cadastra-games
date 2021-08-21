@@ -153,13 +153,19 @@ app.put("/games/:id", (req, res) => {
 // DELETE - Método para excluir itens
 app.delete("/games/:id", (req, res) => {
   const id = req.params.id - 1;
-  const game = games[id];
+  const gameIndex = getIndexByGame(id);
 
-  if (!game) {
-    res.send("Jogo não está cadastrado.");
+  if (gameIndex < 0) {
+    res.status(400).send({
+        message: "Jogo não encontrado."
+    });
+    return;
   }
-  delete games[id];
-  res.send(`${game} foi excluído com sucesso.`);
+
+  games.splice(gameIndex, 1);
+  res.send({
+      message: "Jogo foi removido com sucesso."
+  });
 });
 
 // Comando para a escuta da porta
