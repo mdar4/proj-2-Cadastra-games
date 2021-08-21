@@ -115,12 +115,39 @@ app.post("/games", (req, res) => {
 // PUT - Método para atualizar items
 app.put("/games/:id", (req, res) => {
   const id = req.params.id - 1;
-  const game = games[id];
+  const gameIndex = getIndexByGame(id);
 
-  if (!game) {
-    res.send("Jogo não foi encontrado.");
+  if (gameIndex < 0) {
+    res.status(400).send({
+        message: "Jogo não encontrado, tente."
+    });
+    return;
   }
-  res.send(game);
+
+  const newGame = req.body;
+
+  if(!Object.keys(newGame).length) {
+      res.status(400).send({
+          message: "O body está vazio."
+      });
+      return;
+  }
+
+  if(!newGame || !newGame.nome ||!newGame.ano) {
+      res.status(400).send({
+          message: "Jogo inválido, tente novamente."
+      });
+      return;
+  }
+
+  const game = getGamesById(id);
+
+  console.log(gameIndex);
+  games[gameIndex] = {
+      ... game,
+      ... newGame,
+  }
+  res.send(games[gameIndex]);
 });
 
 // DELETE - Método para excluir itens
