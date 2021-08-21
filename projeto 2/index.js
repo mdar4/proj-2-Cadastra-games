@@ -47,6 +47,18 @@ const games = [
   },
 ];
 
+const getGameValidate = () => games.filter(Boolean);
+
+const getGamesById = (id) => {
+    getGameValidate().find((game) => {
+        game.id == id;
+    });
+}
+
+const getIndexByGame = (id) => {
+    getGameValidate().find((game) => game.id == id);
+}
+
 // GET - Rota principal
 app.get("/", (req, res) => {
   res.send("Bem vindos !");
